@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yash Agarwal | Portfolio</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230a0008'/><text y='72' x='8' font-family='serif' font-size='62' font-weight='900' fill='%23ff2d78'>YA</text><text y='88' x='68' font-family='serif' font-size='28' font-weight='900' fill='%23f0e000'>.</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -170,15 +171,15 @@ section {
 }
 section > * { position: relative; z-index: 2; }
 
-/* Per-section halftone */
-section::before {
-  content: '';
+/* Per-section halftone div */
+.halftone {
   position: absolute; inset: 0;
   background-image: radial-gradient(circle, #1a0830 1.2px, transparent 1.2px);
   background-size: 20px 20px;
-  opacity: 0.45;
+  background-attachment: fixed;
+  opacity: 0.4;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 /* Eyebrow label */
@@ -489,21 +490,43 @@ section::before {
   z-index: -1;
   pointer-events: none;
 }
-.proj-card:hover { transform: translate(-3px,-3px); }
-/* Reveal strip */
-.proj-reveal {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--pink), var(--purple));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.28s ease, height 0.28s ease;
+.proj-card:hover { transform: translate(-3px,-3px); border-color: var(--pink); }
+.proj-arr {
+  display: block;
+  margin-top: 14px;
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  color: var(--purple);
+  transition: color 0.2s;
 }
-.proj-card:hover .proj-reveal {
-  transform: scaleX(1);
-  height: 100%;
-  opacity: 0.07;
+.proj-card:hover .proj-arr { color: var(--yellow); }
+
+/* Card title swish on mouse-leave */
+.proj-name { position: relative; display: inline-block; }
+.proj-name::before, .proj-name::after {
+  content: attr(data-t);
+  position: absolute; top: 0; left: 0;
+  font-family: 'Bangers', cursive;
+  font-size: inherit; letter-spacing: inherit; line-height: inherit;
+  pointer-events: none; opacity: 0;
+}
+.proj-name::before { color: #00d4ff; }
+.proj-name::after  { color: #ff2d78; }
+.proj-name.card-swish::before { animation: card-sw-a 0.5s forwards; }
+.proj-name.card-swish::after  { animation: card-sw-b 0.5s 0.05s forwards; }
+@keyframes card-sw-a {
+  0%   { transform:translate(0);        opacity:0; clip-path:inset(0 0 100% 0); }
+  20%  { transform:translate(-8px,0);   opacity:1; clip-path:inset(15% 0 55% 0); }
+  40%  { transform:translate(7px,-2px); opacity:1; clip-path:inset(60% 0 10% 0); }
+  60%  { transform:translate(-5px,0);   opacity:.8;clip-path:inset(35% 0 40% 0); }
+  100% { transform:translate(0);        opacity:0; clip-path:inset(0 0 100% 0); }
+}
+@keyframes card-sw-b {
+  0%   { transform:translate(0);        opacity:0; clip-path:inset(0 0 100% 0); }
+  25%  { transform:translate(8px,2px);  opacity:1; clip-path:inset(55% 0 20% 0); }
+  45%  { transform:translate(-6px,0);   opacity:1; clip-path:inset(8% 0 68% 0);  }
+  65%  { transform:translate(4px,-1px); opacity:.8;clip-path:inset(70% 0 5% 0);  }
+  100% { transform:translate(0);        opacity:0; clip-path:inset(0 0 100% 0); }
 }
 .proj-tag {
   font-size: 11px;
@@ -554,40 +577,55 @@ section::before {
   text-shadow: 3px 3px 0 var(--purple);
   margin-bottom: 44px;
 }
-.bento {
+.sk-bento {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   max-width: 1020px;
 }
-.sk {
+.sk-cell {
   border: 1px solid var(--dim);
+  border-left: 3px solid var(--cell-accent, #2a0a3a);
   padding: 22px;
   background: rgba(123,47,255,0.04);
+  transition: background 0.2s;
 }
-.sk.wide { grid-column: span 2; }
+.sk-cell.big { grid-column: span 2; }
+.sk-cell.accent-pink   { --cell-accent:#ff2d78; background:rgba(255,45,120,0.05); }
+.sk-cell.accent-purple { --cell-accent:#7b2fff; background:rgba(123,47,255,0.05); }
+.sk-cell.accent-yellow { --cell-accent:#f0e000; background:rgba(240,224,0,0.04); }
+.sk-cell.accent-cyan   { --cell-accent:#00d4ff; background:rgba(0,212,255,0.04); }
+.sk-cell.accent-pink:hover   { background:rgba(255,45,120,0.12); }
+.sk-cell.accent-purple:hover { background:rgba(123,47,255,0.12); }
+.sk-cell.accent-yellow:hover { background:rgba(240,224,0,0.10); }
+.sk-cell.accent-cyan:hover   { background:rgba(0,212,255,0.10); }
+.sk-cat {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
 .sk-name {
   font-family: 'Bangers', cursive;
   font-size: 20px;
   letter-spacing: 2px;
   color: var(--white);
   margin-bottom: 8px;
+  transition: color 0.2s;
 }
-.sk-pct {
-  font-size: 11px;
-  color: var(--pink);
-  letter-spacing: 1px;
-  margin-bottom: 9px;
-}
-.sk-track {
+.sk-cell:hover .sk-name { color: var(--cell-accent); }
+.sk-bar {
   height: 2px;
   background: var(--dim);
   overflow: hidden;
+  margin-top: 8px;
 }
-.sk-bar {
+.sk-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--pink), var(--purple));
+  background: linear-gradient(90deg, var(--cell-accent, #ff2d78), rgba(255,255,255,0.25));
   transition: width 0.85s ease;
 }
 
@@ -777,6 +815,21 @@ section::before {
     transition: none !important;
   }
 }
+
+/* ═══════════════════════════════
+   SECTION GRADIENT FADES
+═══════════════════════════════ */
+#hero::after    { content:''; position:absolute; bottom:0; left:0; right:0; height:140px; background:linear-gradient(to bottom, transparent, #08000f); pointer-events:none; z-index:4; }
+#about::after   { content:''; position:absolute; bottom:0; left:0; right:0; height:120px; background:linear-gradient(to bottom, transparent, #040010); pointer-events:none; z-index:4; }
+#projects::after{ content:''; position:absolute; bottom:0; left:0; right:0; height:120px; background:linear-gradient(to bottom, transparent, #050008); pointer-events:none; z-index:4; }
+#skills::after  { content:''; position:absolute; bottom:0; left:0; right:0; height:120px; background:linear-gradient(to bottom, transparent, #06000c); pointer-events:none; z-index:4; }
+#experience::after{ content:''; position:absolute; bottom:0; left:0; right:0; height:120px; background:linear-gradient(to bottom, transparent, #050008); pointer-events:none; z-index:4; }
+
+#about::before, #projects::before, #skills::before, #experience::before, #contact::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:80px;
+  background:linear-gradient(to top, transparent, rgba(10,0,8,0.6));
+  pointer-events:none; z-index:4;
+}
   </style>
 </head>
 <body>
@@ -807,6 +860,7 @@ section::before {
 
   <!-- ═══ HERO ═══ -->
   <section id="hero">
+    <div class="halftone"></div>
     <canvas id="hero-canvas"></canvas>
     <span class="cb cb-tl">VIT · 2026</span>
     <span class="cb cb-tr">CGPA 8.78</span>
@@ -826,24 +880,30 @@ section::before {
 
   <!-- ═══ ABOUT ═══ -->
   <section id="about">
+    <div class="halftone"></div>
     <span class="eyebrow">ORIGIN STORY</span>
     <h2 class="about-title swish" data-t="WHO AM I?" style="--sd:4.2s;--sd2:0.1s">WHO AM I?</h2>
     <div class="about-grid">
       <div class="stat-card reveal-up">
         <div class="stat-num">8.78</div>
         <div class="stat-label">CGPA · VIT VELLORE</div>
-        <p class="stat-bio">3rd year B.Tech CSE + AI/ML. Building production systems — Kafka pipelines at 50K events/sec, distributed inference platforms, DQN agents. I ship things that work.</p>
+        <p class="stat-bio">4th year B.Tech CSE + AI/ML. Building production systems — Kafka pipelines at 50K events/sec, distributed inference platforms, DQN agents. I ship things that work.</p>
       </div>
       <div class="stat-card reveal-up">
         <div class="stat-num">5+</div>
         <div class="stat-label">PRODUCTION PROJECTS</div>
         <p class="stat-bio">Interning at Jio Platforms, Mumbai — engineered Kafka streaming pipelines processing 50,000+ events/sec. Reduced replication lag by 30%. Open to SDE / MLE roles, placement 2026.</p>
       </div>
+      <div class="stat-card reveal-up" style="grid-column: 1 / -1; margin-top: 18px;">
+        <div class="stat-label" style="font-size:9px;">THE PERSON BEHIND THE CODE</div>
+        <p class="stat-bio" style="line-height:1.8;">Born and brought up in Hyderabad — the city of Charminar, biryani, and chaotic traffic I somehow miss at VIT. Family roots from Rajasthan, which explains the stubborn persistence and the inability to back down from a hard problem. When I'm not debugging Kafka consumer lag at 2am, you'll find me brewing cold coffee, eating dark chocolate brownies, and convincing myself that one more episode of something is fine before I sleep.</p>
+      </div>
     </div>
   </section>
 
   <!-- ═══ PROJECTS ═══ -->
   <section id="projects">
+    <div class="halftone"></div>
     <div class="proj-head">
       <span class="eyebrow">THE MULTIVERSE OF WORK</span>
       <h2 class="projects-title swish" data-t="PROJECTS" style="--sd:5.8s;--sd2:1.4s">PROJECTS</h2>
@@ -852,52 +912,52 @@ section::before {
 
       <div class="proj-card" data-bubble="INFRA!">
         <span class="proj-tag">DISTRIBUTED SYSTEMS</span>
-        <div class="proj-name">AI INFERENCE PLATFORM</div>
+        <div class="proj-name" data-t="AI INFERENCE PLATFORM">AI INFERENCE PLATFORM</div>
         <p class="proj-desc">12 Dockerized microservices with async request queuing via FastAPI + Redis. Kafka-based task routing hitting 50 req/sec at 50ms p99. Adaptive Q-Learning scheduler for dynamic batch optimization.</p>
         <div class="proj-stack">
           <span>FASTAPI</span><span>KAFKA</span><span>REDIS</span><span>DOCKER</span><span>PROMETHEUS</span>
         </div>
-        <div class="proj-reveal"></div>
+        <span class="proj-arr">→</span>
       </div>
 
       <div class="proj-card" data-bubble="FULLSTACK!">
         <span class="proj-tag">FULLSTACK · BACKEND</span>
-        <div class="proj-name">IPL-BHAI-LOG</div>
+        <div class="proj-name" data-t="IPL-BHAI-LOG">IPL-BHAI-LOG</div>
         <p class="proj-desc">Full-stack sports prediction platform. SQLAlchemy row-level locking prevents race conditions on concurrent bets. JWT auth, bcrypt, rate limiting, Alembic migrations. ACID-compliant transaction engine.</p>
         <div class="proj-stack">
           <span>FASTAPI</span><span>REACT</span><span>MYSQL</span><span>JWT</span><span>SQLALCHEMY</span>
         </div>
-        <div class="proj-reveal"></div>
+        <span class="proj-arr">→</span>
       </div>
 
       <div class="proj-card" data-bubble="RL AGENT!">
         <span class="proj-tag">REINFORCEMENT LEARNING</span>
-        <div class="proj-name">SELF-DRIVING DQN</div>
+        <div class="proj-name" data-t="SELF-DRIVING DQN">SELF-DRIVING DQN</div>
         <p class="proj-desc">Deep Q-Network agent for autonomous navigation using LiDAR sensor data in a Pygame simulation. Complex reward function for lane-keeping + collision avoidance. 50 commits of iterative RL research.</p>
         <div class="proj-stack">
           <span>TENSORFLOW</span><span>PYGAME</span><span>DQN</span><span>KERAS</span><span>COLAB</span>
         </div>
-        <div class="proj-reveal"></div>
+        <span class="proj-arr">→</span>
       </div>
 
       <div class="proj-card" data-bubble="AUTOMATION!">
         <span class="proj-tag">AUTOMATION · AI</span>
-        <div class="proj-name">PLACEMENT TRACKER</div>
+        <div class="proj-name" data-t="PLACEMENT TRACKER">PLACEMENT TRACKER</div>
         <p class="proj-desc">Modular Gmail → Gemini AI → Google Sheets placement pipeline. pytest test suite, GitHub Actions CI, ruff linting. Most production-grade repo: tests + CI + docs + separation of concerns.</p>
         <div class="proj-stack">
           <span>PYTHON</span><span>GEMINI</span><span>GMAIL API</span><span>PYTEST</span><span>CI/CD</span>
         </div>
-        <div class="proj-reveal"></div>
+        <span class="proj-arr">→</span>
       </div>
 
       <div class="proj-card" data-bubble="ML!">
         <span class="proj-tag">MACHINE LEARNING</span>
-        <div class="proj-name">FLIGHT PREDICTOR</div>
+        <div class="proj-name" data-t="FLIGHT PREDICTOR">FLIGHT PREDICTOR</div>
         <p class="proj-desc">From-scratch gradient descent implementation (no sklearn for core model). EDA-heavy preprocessing pipeline, deployed on Render. Built to understand ML fundamentals, not just use them.</p>
         <div class="proj-stack">
           <span>PYTHON</span><span>NUMPY</span><span>FLASK</span><span>RENDER</span><span>FROM-SCRATCH</span>
         </div>
-        <div class="proj-reveal"></div>
+        <span class="proj-arr">→</span>
       </div>
 
     </div>
@@ -905,64 +965,76 @@ section::before {
 
   <!-- ═══ SKILLS ═══ -->
   <section id="skills">
+    <div class="halftone"></div>
     <span class="eyebrow">POWER SET</span>
     <h2 class="skills-title swish" data-t="SKILLS" style="--sd:3.9s;--sd2:2.6s">SKILLS</h2>
-    <div class="bento" id="bento">
-      <div class="sk wide">
-        <div class="sk-name">Python</div>
-        <div class="sk-pct">95%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="95"></div></div>
+    <div class="sk-bento" id="bento">
+      <div class="sk-cell big accent-pink">
+        <div class="sk-cat">PRIMARY LANGUAGE</div>
+        <div class="sk-name">PYTHON</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="95"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">FastAPI</div>
-        <div class="sk-pct">88%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="88"></div></div>
+      <div class="sk-cell accent-yellow">
+        <div class="sk-cat">DATA STREAMING</div>
+        <div class="sk-name">KAFKA</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="85"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">Kafka</div>
-        <div class="sk-pct">85%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="85"></div></div>
+      <div class="sk-cell accent-cyan">
+        <div class="sk-cat">DEVOPS</div>
+        <div class="sk-name">DOCKER</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="80"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">TF / Keras</div>
-        <div class="sk-pct">82%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="82"></div></div>
+      <div class="sk-cell accent-purple">
+        <div class="sk-cat">ML FRAMEWORK</div>
+        <div class="sk-name">TENSORFLOW</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="85"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">Docker</div>
-        <div class="sk-pct">80%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="80"></div></div>
+      <div class="sk-cell accent-purple">
+        <div class="sk-cat">ML FRAMEWORK</div>
+        <div class="sk-name">PYTORCH</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="82"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">React.js</div>
-        <div class="sk-pct">78%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="78"></div></div>
+      <div class="sk-cell accent-pink">
+        <div class="sk-cat">BACKEND</div>
+        <div class="sk-name">FASTAPI / FLASK</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="83"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">SQL / PG</div>
-        <div class="sk-pct">80%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="80"></div></div>
+      <div class="sk-cell accent-pink">
+        <div class="sk-cat">FRONTEND</div>
+        <div class="sk-name">REACT.JS</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="78"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">Gemini API</div>
-        <div class="sk-pct">76%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="76"></div></div>
+      <div class="sk-cell accent-purple">
+        <div class="sk-cat">DATABASES</div>
+        <div class="sk-name">SQL / POSTGRES</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="80"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">Redis</div>
-        <div class="sk-pct">75%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="75"></div></div>
+      <div class="sk-cell accent-cyan">
+        <div class="sk-cat">CACHING</div>
+        <div class="sk-name">REDIS</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="74"></div></div>
       </div>
-      <div class="sk">
-        <div class="sk-name">C++ / Java</div>
-        <div class="sk-pct">72%</div>
-        <div class="sk-track"><div class="sk-bar" data-w="72"></div></div>
+      <div class="sk-cell accent-yellow">
+        <div class="sk-cat">OBSERVABILITY</div>
+        <div class="sk-name">PROMETHEUS</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="75"></div></div>
+      </div>
+      <div class="sk-cell accent-purple">
+        <div class="sk-cat">LANGUAGES</div>
+        <div class="sk-name">JAVA / C++</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="72"></div></div>
+      </div>
+      <div class="sk-cell accent-cyan">
+        <div class="sk-cat">RL / SIMULATION</div>
+        <div class="sk-name">DQN / PYGAME</div>
+        <div class="sk-bar"><div class="sk-fill" data-w="78"></div></div>
       </div>
     </div>
   </section>
 
   <!-- ═══ EXPERIENCE ═══ -->
   <section id="experience">
+    <div class="halftone"></div>
     <span class="eyebrow">THE JOURNEY</span>
     <h2 class="exp-title swish" data-t="EXPERIENCE" style="--sd:6.1s;--sd2:0.7s">EXPERIENCE</h2>
     <div class="timeline">
@@ -1002,6 +1074,7 @@ section::before {
 
   <!-- ═══ CONTACT ═══ -->
   <section id="contact">
+    <div class="halftone"></div>
     <span class="eyebrow">INTO THE NEXT DIMENSION</span>
     <h2 class="contact-title swish" data-t="CONTACT" style="--sd:4.7s;--sd2:3.2s">CONTACT</h2>
     <div class="contact-frame">
@@ -1315,7 +1388,7 @@ document.querySelectorAll('.proj-card').forEach(c => {
   const grid = document.getElementById('bento');
   const obs = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) {
-      grid.querySelectorAll('.sk-bar').forEach((bar, i) => {
+      grid.querySelectorAll('.sk-fill').forEach((bar, i) => {
         setTimeout(() => { bar.style.width = bar.dataset.w + '%'; }, i * 55);
       });
       obs.disconnect();
@@ -1371,6 +1444,20 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       e.preventDefault();
       lenis.scrollTo(target, { offset: -64, duration: 1.2 });
     }
+  });
+});
+
+/* ═══════════════════════════════
+   11b. CARD TITLE SWISH ON MOUSE-LEAVE
+═══════════════════════════════ */
+document.querySelectorAll('.proj-card').forEach(card => {
+  const title = card.querySelector('.proj-name');
+  if (!title) return;
+  card.addEventListener('mouseleave', function() {
+    title.classList.remove('card-swish');
+    void title.offsetWidth;
+    title.classList.add('card-swish');
+    setTimeout(() => title.classList.remove('card-swish'), 550);
   });
 });
 
