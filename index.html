@@ -1103,7 +1103,7 @@ section > * { position: relative; z-index: 2; }
         <a href="#" class="ct-btn ct-btn-fill mag-btn">RESUME ↗</a>
         <a href="https://github.com/Yash-Agarwal3125" target="_blank" class="ct-btn ct-btn-oy mag-btn">GITHUB ↗</a>
         <a href="https://linkedin.com/in/yash-agarwal-3125" target="_blank" class="ct-btn ct-btn-op mag-btn">LINKEDIN ↗</a>
-        <a href="mailto:yashagarwal3125@gmail.com" class="ct-btn ct-btn-oy mag-btn">EMAIL →</a>
+        <a href="#" id="email-btn" class="ct-btn ct-btn-oy mag-btn">EMAIL →</a>
       </div>
 
       <div class="footer-txt">© 2026 Yash Agarwal · Built with chaos and caffeine · Hyderabad → VIT → Mumbai</div>
@@ -1559,6 +1559,96 @@ document.getElementById('sv-logo').addEventListener('click', function(e) {
       clicks = 0;
       showEasterCard('ANCIENT WISDOM', 'The code is dark and full of errors.', '— every senior dev, every standup', el);
     }
+  });
+})();
+
+/* ═══════════════════════════════
+   13. EMAIL POPUP
+═══════════════════════════════ */
+(function() {
+  const EMAIL = 'yashagarwal3125@gmail.com';
+  const btn   = document.getElementById('email-btn');
+  if (!btn) return;
+
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Close if already open
+    const existing = document.getElementById('email-popup');
+    if (existing) { existing.remove(); return; }
+
+    const rect = btn.getBoundingClientRect();
+    const popup = document.createElement('div');
+    popup.id = 'email-popup';
+    popup.style.cssText = [
+      'position:fixed',
+      'z-index:9999',
+      'width:300px',
+      'background:#0a0018',
+      'border:2px solid #7b2fff',
+      "font-family:'Space Mono',monospace",
+      'pointer-events:all',
+      'animation:ee-pop 0.2s cubic-bezier(0.34,1.56,0.64,1) forwards'
+    ].join(';') + ';';
+
+    popup.innerHTML =
+      '<div style="position:relative;">' +
+        '<div style="position:absolute;bottom:-4px;right:-4px;width:100%;height:100%;border:2px solid #ff2d78;z-index:-1;pointer-events:none;"></div>' +
+        '<div style="background:#f0e000;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;">' +
+          '<span style="font-size:9px;letter-spacing:3px;color:#0a0008;font-weight:700;">REACH OUT</span>' +
+          '<span id="email-popup-close" style="font-size:16px;color:#0a0008;cursor:pointer;line-height:1;">✕</span>' +
+        '</div>' +
+        '<div style="padding:16px 18px;">' +
+          '<div style="font-size:10px;letter-spacing:2px;color:#a890cc;margin-bottom:8px;">EMAIL ADDRESS</div>' +
+          '<div id="email-addr" style="font-size:13px;color:#f0e000;letter-spacing:1px;margin-bottom:16px;word-break:break-all;">' + EMAIL + '</div>' +
+          '<div style="display:flex;gap:10px;">' +
+            '<button id="email-copy" style="flex:1;font-family:\'Bangers\',cursive;font-size:15px;letter-spacing:2px;padding:9px 0;background:#7b2fff;color:#fff;border:none;cursor:pointer;">COPY</button>' +
+            '<a href="mailto:' + EMAIL + '" id="email-open" style="flex:1;font-family:\'Bangers\',cursive;font-size:15px;letter-spacing:2px;padding:9px 0;background:transparent;color:#f0e000;border:2px solid #f0e000;text-align:center;display:block;box-sizing:border-box;">OPEN MAIL ↗</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    // Position above the button
+    const cardH = 160;
+    let top  = rect.top - cardH - 12;
+    let left = rect.left;
+    if (top < 10) top = rect.bottom + 8;
+    if (left + 300 > window.innerWidth - 20) left = window.innerWidth - 320;
+    if (left < 10) left = 10;
+    popup.style.top  = top  + 'px';
+    popup.style.left = left + 'px';
+
+    document.body.appendChild(popup);
+
+    document.getElementById('email-popup-close').addEventListener('click', function(e) {
+      e.stopPropagation();
+      popup.remove();
+    });
+
+    document.getElementById('email-copy').addEventListener('click', function(e) {
+      e.stopPropagation();
+      navigator.clipboard.writeText(EMAIL).then(() => {
+        this.textContent = 'COPIED ✓';
+        this.style.background = '#00ff88';
+        this.style.color = '#0a0008';
+        setTimeout(() => {
+          this.textContent = 'COPY';
+          this.style.background = '#7b2fff';
+          this.style.color = '#fff';
+        }, 2000);
+      });
+    });
+
+    // Close on outside click
+    setTimeout(() => {
+      document.addEventListener('click', function handler(ev) {
+        if (!popup.contains(ev.target) && ev.target !== btn) {
+          popup.remove();
+          document.removeEventListener('click', handler);
+        }
+      });
+    }, 0);
   });
 })();
 </script>
